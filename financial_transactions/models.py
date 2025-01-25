@@ -1,5 +1,6 @@
-from django.db import models
 import datetime
+
+from django.db import models
 
 
 class Status(models.Model):
@@ -21,11 +22,19 @@ class TransactionType(models.Model):
 class Category(models.Model):
     """Категория транзакции."""
 
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=128)
     transaction_type = models.ForeignKey(
         'TransactionType',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'transaction_type'],
+                name="unique_category",
+            ),
+        ]
 
     def __str__(self):
         return str(self.name)
@@ -34,11 +43,22 @@ class Category(models.Model):
 class Subcategory(models.Model):
     """Подкатегория транзакции."""
 
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=128)
     category = models.ForeignKey(
         'Category',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'category'],
+                name="unique_subcategory",
+            ),
+        ]
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Transaction(models.Model):
@@ -61,7 +81,7 @@ class Transaction(models.Model):
         'TransactionType',
         on_delete=models.CASCADE,
     )
-    category = models.ForeignKey(
-        'Category',
+    subcategory = models.ForeignKey(
+        'Subcategory',
         on_delete=models.CASCADE,
     )

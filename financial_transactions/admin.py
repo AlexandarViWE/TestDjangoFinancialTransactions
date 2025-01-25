@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .forms import TransactionForm
-from .models import Category, Status, Transaction, TransactionType
+from .forms import TransactionAdminForm
+from .models import Category, Status, Subcategory, Transaction, TransactionType
 from .utils import is_ajax
 
 
@@ -30,27 +30,15 @@ class SubcategoryAdmin(FilterOnSearchAdminMixin, admin.ModelAdmin):
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    form = TransactionForm
-    autocomplete_fields = ['category', 'transaction_type']
-    chain_select = {
-        "transaction_type": "category",
-    }
+    form = TransactionAdminForm
+    autocomplete_fields = ['subcategory', 'transaction_type']
 
-    # class Media:
-    #     js = ('autocompletes/js/search.js', )
-
-    # def formfield_for_dbfield(self, db_field, request, **kwargs):
-    #     field = super().formfield_for_dbfield(db_field, request, **kwargs)
-    #     if db_field.name in self.chain_select:
-    #         field.widget.attrs.update({
-    #             'onchange': 'search(this);',
-    #             'data-name': self.chain_select[db_field.name],
-    #         })
-    #     return field
+    fields = ['status', 'amount', 'transaction_type',
+              'category', 'subcategory', 'description', 'created_at']
 
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Status)
-# admin.site.register(Subcategory)
+admin.site.register(Subcategory, SubcategoryAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(TransactionType, TransactionTypeAdmin)
