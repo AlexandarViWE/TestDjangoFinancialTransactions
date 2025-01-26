@@ -9,8 +9,13 @@ class FilterOnSearchAdminMixin:
 
     def get_search_results(self, request, queryset, search_term):
         if is_ajax(request):
-            query = {filter: request.GET.get(filter)
-                     for filter in self.list_filter}
+            query = {}
+            for field_filter in self.list_filter:
+                value = request.GET.get(field_filter)
+                if value == '':
+                    field_filter = f"{field_filter}__isnull"
+                    value = True
+                query[field_filter] = value
             queryset = queryset.filter(**query)
         return super().get_search_results(request, queryset, search_term)
 
