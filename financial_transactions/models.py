@@ -72,7 +72,7 @@ class Transaction(models.Model):
         help_text="Комментарий к записи",
         blank=True,
     )
-    amount = models.IntegerField(
+    amount = models.PositiveIntegerField(
         help_text="Количество средств в рублях.",
     )
     created_at = models.DateField(default=datetime.date.today)
@@ -85,3 +85,6 @@ class Transaction(models.Model):
         'Subcategory',
         on_delete=models.CASCADE,
     )
+
+    def category(self) -> Category:
+        return self.subcategory.category
