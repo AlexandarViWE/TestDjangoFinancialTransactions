@@ -24,7 +24,7 @@ class TransactionAdminForm(forms.ModelForm):
     )
 
     class Media:
-        js = ('autocompletes/js/search.js', )
+        js = ('financial_transactions/js/search.js', )
 
     class Meta:
         model = Transaction
