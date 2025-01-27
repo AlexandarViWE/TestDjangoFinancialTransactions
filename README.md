@@ -64,7 +64,7 @@
 
 Установка зависимостей.
 ```shell
-pip -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Миграция базы данных.
