@@ -4,17 +4,16 @@ from rangefilter.filters import DateRangeFilterBuilder
 from financial_transactions.admin.filters import (CategoryListFilter,
                                                   FilterOnSearchAdminMixin,
                                                   SubcategoryListFilter)
-from financial_transactions.forms import TransactionAdminForm
 from financial_transactions.models import (Category, Status, Subcategory,
                                            Transaction, TransactionType)
-
+from financial_transactions.forms import TransactionAdminForm
 
 class TransactionTypeAdmin(admin.ModelAdmin):
     search_fields = ['name',]
 
 
 class CategoryAdmin(FilterOnSearchAdminMixin, admin.ModelAdmin):
-    list_filter = ['transaction_type',]
+    list_filter = ['transaction_types',]
     search_fields = ['name',]
 
 
@@ -25,12 +24,11 @@ class SubcategoryAdmin(FilterOnSearchAdminMixin, admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     list_select_related = ["status", "transaction_type",
-                           "subcategory", "subcategory__category"]
+                           "category", "subcategory"]
+
+    autocomplete_fields = ['subcategory', 'category', 'transaction_type']
 
     form = TransactionAdminForm
-
-    autocomplete_fields = ['subcategory', 'transaction_type']
-
     fields = ['status', 'amount', 'transaction_type',
               'category', 'subcategory', 'description', 'created_at']
 
@@ -43,6 +41,9 @@ class TransactionAdmin(admin.ModelAdmin):
         CategoryListFilter,
         SubcategoryListFilter,
     ]
+
+    class Media:
+        js = ('financial_transactions/js/search.js', )
 
 
 admin.site.register(Category, CategoryAdmin)

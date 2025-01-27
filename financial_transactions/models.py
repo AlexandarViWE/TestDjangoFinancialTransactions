@@ -23,18 +23,17 @@ class Category(models.Model):
     """Категория транзакции."""
 
     name = models.CharField(max_length=128)
-    transaction_type = models.ForeignKey(
+    transaction_types = models.ManyToManyField(
         'TransactionType',
-        on_delete=models.CASCADE,
     )
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'transaction_type'],
-                name="unique_category",
-            ),
-        ]
+    # class Meta:
+    #     constraints = [
+    #         models.UniqueConstraint(
+    #             fields=['name', 'transaction_type'],
+    #             name="unique_category",
+    #         ),
+    #     ]
 
     def __str__(self):
         return str(self.name)
@@ -81,10 +80,11 @@ class Transaction(models.Model):
         'TransactionType',
         on_delete=models.CASCADE,
     )
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.CASCADE,
+    )
     subcategory = models.ForeignKey(
         'Subcategory',
         on_delete=models.CASCADE,
     )
-
-    def category(self) -> Category:
-        return self.subcategory.category

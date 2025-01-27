@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-from financial_transactions.models import Category, Subcategory
 from django.contrib.admin.utils import get_fields_from_path
 from django.db.models import ForeignKey
 
@@ -17,7 +15,6 @@ class FilterOnSearchAdminMixin:
     """
 
     def get_search_results(self, request, queryset, search_term):
-        """"""
         if is_ajax(request):
             query = {}
             for field_filter in self.list_filter:
@@ -53,8 +50,7 @@ class NameFieldListFilter(admin.SimpleListFilter):
             None
         )
         if not foreign_field:
-            print(self)
-            raise ValueError  # FIXME: Дописать ошибку.
+            raise ValueError  # FIXME: дописать ошибку.
         related_model = foreign_field.related_model
 
         queryset = related_model.objects.all()
@@ -89,10 +85,10 @@ class CategoryListFilter(NameFieldListFilter):
     title = 'Category'
     parameter_name = 'category_name'
 
-    field = 'subcategory__category__name'
-    
+    field = 'category__name'
+
     depends_on = "transaction_type__id__exact"
-    filtered_field = 'transaction_type_id'
+    filtered_field = 'transaction_types'
 
 
 class SubcategoryListFilter(NameFieldListFilter):

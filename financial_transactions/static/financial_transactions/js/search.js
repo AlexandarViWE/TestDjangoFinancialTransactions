@@ -1,8 +1,8 @@
 'use strict'
 
 function search(obj) {
-    if (obj.form.elements[obj.dataset.name]) {
-        patch_url(obj.form.elements[obj.dataset.name], { [obj.name]: obj.value })
+    if (obj.form.elements[obj.dataset.relatedfieldname]) {
+        patch_url(obj.form.elements[obj.dataset.relatedfieldname], { [obj.dataset.searchparamname]: obj.value })
     };
 }
 
@@ -19,3 +19,17 @@ function patch_data(search, ajaxOptions, baseData) {
         return { ...baseData(params), ...search }
     }
 }
+
+window.addEventListener("load", function () {
+    django.jQuery("select[name=category]")
+        .attr("onchange", "search(this);")
+        .attr("data-relatedFieldName", "subcategory")
+        .attr("data-searchParamName", "category")
+        .trigger("change");
+
+    django.jQuery("select[name=transaction_type]")
+        .attr("onchange", "search(this);")
+        .attr("data-relatedFieldName", "category")
+        .attr("data-searchParamName", "transaction_types")
+        .trigger("change");
+});
