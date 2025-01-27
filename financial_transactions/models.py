@@ -22,7 +22,7 @@ class TransactionType(models.Model):
 class Category(models.Model):
     """Категория транзакции."""
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     transaction_types = models.ManyToManyField(
         'TransactionType',
     )
