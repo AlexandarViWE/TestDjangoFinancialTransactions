@@ -12,6 +12,8 @@ class TransactionAdminForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
+        if self._errors:
+            return
         transaction_type: TransactionType = self.cleaned_data['transaction_type']
         category: Category = self.cleaned_data['category']
         subcategory: Subcategory = self.cleaned_data['subcategory']
