@@ -5,6 +5,10 @@ from django.db import models
 
 class Status(models.Model):
     """Статус транзакции."""
+
+    class Meta:
+        verbose_name_plural = "Statuses"
+
     name = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
@@ -27,13 +31,8 @@ class Category(models.Model):
         'TransactionType',
     )
 
-    # class Meta:
-    #     constraints = [
-    #         models.UniqueConstraint(
-    #             fields=['name', 'transaction_type'],
-    #             name="unique_category",
-    #         ),
-    #     ]
+    class Meta:
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return str(self.name)
@@ -49,6 +48,7 @@ class Subcategory(models.Model):
     )
 
     class Meta:
+        verbose_name_plural = "Subcategories"
         constraints = [
             models.UniqueConstraint(
                 fields=['name', 'category'],
